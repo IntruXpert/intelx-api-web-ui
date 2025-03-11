@@ -1,0 +1,24 @@
+{{define "content"}}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">File Preview</h2>
+                <div>
+                    <a href="javascript:history.back()" class="btn btn-light me-2">Back to Results</a>
+                    <a href="/download?rid={{.RecordID}}&sid={{.StorageID}}&bucket={{or .Bucket "pastes"}}" class="btn btn-success">Download Full File</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <p class="mb-0">This is a preview of the file. To view the complete file, click the "Download Full File" button.</p>
+                </div>
+                
+                <div class="preview-container bg-dark text-light p-3 rounded">
+                    <pre class="mb-0">{{.Preview}}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}} 

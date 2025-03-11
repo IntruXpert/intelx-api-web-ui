@@ -1,0 +1,111 @@
+{{define "content"}}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-0">Search Results for "{{.SearchTerm}}"</h2>
+                    {{if and .DateFrom .DateTo}}
+                    <div class="text-light mt-2">
+                        <small>
+                            Date range: From {{.DateFrom}} To {{.DateTo}}
+                        </small>
+                    </div>
+                    {{else if .DateFrom}}
+                    <div class="text-light mt-2">
+                        <small>
+                            Date range: From {{.DateFrom}}
+                        </small>
+                    </div>
+                    {{else if .DateTo}}
+                    <div class="text-light mt-2">
+                        <small>
+                            Date range: To {{.DateTo}}
+                        </small>
+                    </div>
+                    {{end}}
+                </div>
+                <a href="/" class="btn btn-light">New Search</a>
+            </div>
+            <div class="card-body">
+                {{if .Results}}
+                    {{if .Results.Records}}
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Bucket</th>
+                                        <th>Score</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{range .Results.Records}}
+                                    <tr>
+                                        <td>{{if .Name}}{{.Name}}{{else}}<em>No name</em>{{end}}</td>
+                                        <td>{{.Date}}</td>
+                                        <td>{{.Media}}</td>
+                                        <td>{{.Bucket}}</td>
+                                        <td>{{.XScore}}</td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="/preview?sid={{.StorageID}}&rid={{.SystemID}}&bucket={{.Bucket}}" class="btn btn-sm btn-primary">Preview</a>
+                                                <a href="/download?rid={{.SystemID}}&sid={{.StorageID}}&bucket={{.Bucket}}&name={{.Name}}" class="btn btn-sm btn-success">Download</a>
+                                                <a href="https://intelx.io/?did={{.SystemID}}" target="_blank" class="btn btn-sm btn-info">View on IntelX</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {{end}}
+                                </tbody>
+                            </table>
+                        </div>
+                    {{else}}
+                        <div class="alert alert-info">
+                            No results found for "{{.SearchTerm}}". Try a different search term.
+                        </div>
+                    {{end}}
+                {{else}}
+                    <div class="alert alert-danger">
+                        Error retrieving results. Please try again.
+                    </div>
+                {{end}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Convert media type codes to readable names
+    document.addEventListener('DOMContentLoaded', function() {
+        const mediaTypes = {
+            0: 'Unknown',
+            1: 'Email',
+            2: 'Domain',
+            3: 'URL',
+            4: 'IPv4',
+            5: 'IPv6',
+            6: 'CIDRv4',
+            7: 'CIDRv6',
+            8: 'Phone',
+            9: 'Bitcoin',
+            10: 'MAC',
+            11: 'IPFS',
+            12: 'UUID',
+            13: 'Simhash',
+            14: 'Credit Card',
+            15: 'SSN',
+            16: 'IBAN'
+        };
+        
+        document.querySelectorAll('td:nth-child(3)').forEach(function(cell) {
+            const mediaCode = parseInt(cell.textContent);
+            if (mediaTypes[mediaCode]) {
+                cell.textContent = mediaTypes[mediaCode];
+            }
+        });
+    });
+</script>
+{{end}} 
