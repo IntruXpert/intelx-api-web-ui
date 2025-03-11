@@ -1,0 +1,115 @@
+{{define "content"}}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2 class="text-center mb-0">IntelX Search</h2>
+            </div>
+            <div class="card-body">
+                <form action="/search" method="POST">
+                    <div class="mb-3">
+                        <label for="search" class="form-label">Search Term</label>
+                        <input type="text" class="form-control form-control-lg" id="search" name="search" value="{{.SearchTerm}}" placeholder="Enter domain, email, IP, etc." required>
+                        <div class="form-text">
+                            Supported search types: Email, Domain, URL, IPv4/IPv6, CIDR, Phone Number, Bitcoin address, MAC address, IPFS Hash, UUID, Simhash, Credit Card Number, Social Security Number, IBAN
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="maxresults" class="form-label">Maximum Results</label>
+                        <select class="form-select" id="maxresults" name="maxresults">
+                            <option value="10" selected>10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="enable-date-range" name="date_range_enabled" onchange="toggleDateRangeFields()">
+                            <label class="form-check-label" for="enable-date-range">Filter by Date Range</label>
+                        </div>
+                    </div>
+                    
+                    <div id="date-range-container" class="mb-3" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="start-date" class="form-label">Start Date</label>
+                                <input type="datetime-local" class="form-control" id="start-date" name="start_date" value="{{.DateFrom}}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="end-date" class="form-label">End Date</label>
+                                <input type="datetime-local" class="form-control" id="end-date" name="end_date" value="{{.DateTo}}">
+                            </div>
+                        </div>
+                        <div class="form-text">
+                            Format: YYYY-MM-DD HH:MM:SS
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-4 shadow">
+            <div class="card-header bg-info text-white">
+                <h3 class="mb-0">About IntelX</h3>
+            </div>
+            <div class="card-body">
+                <p>Intelligence X is a search engine and data archive. The search engine enables you to search for:</p>
+                <ul>
+                    <li>Leaked data</li>
+                    <li>Data breaches</li>
+                    <li>Pastes</li>
+                    <li>Darknet sites</li>
+                    <li>And much more</li>
+                </ul>
+                <p>For additional details please visit <a href="https://intelx.io" target="_blank">https://intelx.io</a>.</p>
+                <p class="mb-0"><strong>Note:</strong> You need a valid API key to use this interface. You can obtain one at <a href="https://intelx.io/account?tab=developer" target="_blank">https://intelx.io/account?tab=developer</a>.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleDateRangeFields() {
+        const dateRangeContainer = document.getElementById('date-range-container');
+        const isChecked = document.getElementById('enable-date-range').checked;
+        dateRangeContainer.style.display = isChecked ? 'block' : 'none';
+        
+        // Clear the date fields if they're being hidden
+        if (!isChecked) {
+            document.getElementById('start-date').value = '';
+            document.getElementById('end-date').value = '';
+        }
+    }
+    
+    // Set current date as default values for date range
+    document.addEventListener('DOMContentLoaded', function() {
+        // If dates are already provided in the template, check the date range checkbox
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+        
+        if (startDate || endDate) {
+            document.getElementById('enable-date-range').checked = true;
+            toggleDateRangeFields();
+        } else {
+            // Otherwise, set default dates
+            const now = new Date();
+            const oneMonthAgo = new Date();
+            oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+            
+            // Format the dates for datetime-local input
+            const formatDateForInput = (date) => {
+                return date.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:MM
+            };
+            
+            document.getElementById('start-date').value = formatDateForInput(oneMonthAgo);
+            document.getElementById('end-date').value = formatDateForInput(now);
+        }
+    });
+</script>
+{{end}} 
