@@ -1,0 +1,65 @@
+/* Custom styles for IntelX Web Interface */
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+}
+
+.footer {
+    margin-top: auto;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-header {
+    border-bottom: none;
+}
+
+.preview-container {
+    max-height: 600px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.btn-group .btn {
+    margin-right: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    
+    .card-header a.btn {
+        margin-top: 10px;
+    }
+    
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .btn-group .btn {
+        margin-bottom: 5px;
+        margin-right: 0;
+    }
+} 
